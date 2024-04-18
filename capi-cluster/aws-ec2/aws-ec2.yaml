@@ -1,6 +1,9 @@
 apiVersion: cluster.x-k8s.io/v1beta2
 kind: Cluster
 metadata:
+  labels:
+    ccm: external
+    csi: external
   name: capi-ec2
   namespace: default
 spec:
@@ -9,7 +12,7 @@ spec:
       cidrBlocks:
       - 192.168.0.0/16
   controlPlaneRef:
-    apiVersion: controlplane.cluster.x-k8s.io/v1beta2
+    apiVersion: controlplane.cluster.x-k8s.io/v1beta1
     kind: KubeadmControlPlane
     name: capi-ec2-control-plane
   infrastructureRef:
@@ -26,7 +29,7 @@ spec:
   region: us-east-1
   sshKeyName: capi-ec2
 ---
-apiVersion: controlplane.cluster.x-k8s.io/v1beta2
+apiVersion: controlplane.cluster.x-k8s.io/v1beta1
 kind: KubeadmControlPlane
 metadata:
   name: capi-ec2-control-plane
@@ -36,19 +39,19 @@ spec:
     clusterConfiguration:
       apiServer:
         extraArgs:
-          cloud-provider: aws
+          cloud-provider: external
       controllerManager:
         extraArgs:
-          cloud-provider: aws
+          cloud-provider: external
     initConfiguration:
       nodeRegistration:
         kubeletExtraArgs:
-          cloud-provider: aws
+          cloud-provider: external
         name: '{{ ds.meta_data.local_hostname }}'
     joinConfiguration:
       nodeRegistration:
         kubeletExtraArgs:
-          cloud-provider: aws
+          cloud-provider: external
         name: '{{ ds.meta_data.local_hostname }}'
   machineTemplate:
     infrastructureRef:
@@ -70,7 +73,7 @@ spec:
       instanceType: t2.micro
       sshKeyName: capi-ec2
 ---
-apiVersion: cluster.x-k8s.io/v1beta2
+apiVersion: cluster.x-k8s.io/v1beta1
 kind: MachineDeployment
 metadata:
   name: capi-ec2-md-0
@@ -106,7 +109,7 @@ spec:
       instanceType: t2.micro
       sshKeyName: capi-ec2
 ---
-apiVersion: bootstrap.cluster.x-k8s.io/v1beta2
+apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
 kind: KubeadmConfigTemplate
 metadata:
   name: capi-ec2-md-0
@@ -117,5 +120,5 @@ spec:
       joinConfiguration:
         nodeRegistration:
           kubeletExtraArgs:
-            cloud-provider: aws
+            cloud-provider: external
           name: '{{ ds.meta_data.local_hostname }}'
