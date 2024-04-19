@@ -1,4 +1,4 @@
-apiVersion: cluster.x-k8s.io/v1beta1
+apiVersion: cluster.x-k8s.io/v1beta2
 kind: Cluster
 metadata:
   name: capi-eks-argo
@@ -27,7 +27,7 @@ spec:
   sshKeyName: capi-eks-argo
   version: v1.22.6
 ---
-apiVersion: cluster.x-k8s.io/v1beta1
+apiVersion: cluster.x-k8s.io/v1beta2
 kind: MachinePool
 metadata:
   name: capi-eks-argo-pool-0
