@@ -1,7 +1,7 @@
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: Cluster
 metadata:
-  name: capi-eks-argo
+  name: myeks
   namespace: default
 spec:
   clusterNetwork:
@@ -11,43 +11,43 @@ spec:
   controlPlaneRef:
     apiVersion: controlplane.cluster.x-k8s.io/v1beta2
     kind: AWSManagedControlPlane
-    name: capi-eks-argo-control-plane
+    name: myeks-control-plane
   infrastructureRef:
     apiVersion: controlplane.cluster.x-k8s.io/v1beta2
     kind: AWSManagedControlPlane
-    name: capi-eks-argo-control-plane
+    name: myeks-control-plane
 ---
 apiVersion: controlplane.cluster.x-k8s.io/v1beta2
 kind: AWSManagedControlPlane
 metadata:
-  name: capi-eks-argo-control-plane
+  name: myeks-control-plane
   namespace: default
 spec:
   region: us-east-1
-  sshKeyName: capi-eks-argo
+  sshKeyName: myeks
   version: v1.29
 ---
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: MachinePool
 metadata:
-  name: capi-eks-argo-pool-0
+  name: myeks-pool-0
   namespace: default
 spec:
-  clusterName: capi-eks-argo
+  clusterName: myeks
   replicas: 2
   template:
     spec:
       bootstrap:
         dataSecretName: ""
-      clusterName: capi-eks-argo
+      clusterName: myeks
       infrastructureRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
         kind: AWSManagedMachinePool
-        name: capi-eks-argo-pool-0
+        name: myeks-pool-0
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
 kind: AWSManagedMachinePool
 metadata:
-  name: capi-eks-argo-pool-0
+  name: myeks-pool-0
   namespace: default
 spec: {}
